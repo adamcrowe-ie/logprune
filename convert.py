@@ -5,7 +5,14 @@ from main import *
 
 def run():
     if "--test" in sys.argv:
-        TestSuite
+        testUnit = TestSuite.TestUnit("convert")
+        for directory in testUnit.directoriesToTest:
+            try:
+                print "Testing Directory " + directory
+                convert(directory)
+            except:
+                testUnit.testFailure(directory)
+
     else:
         convert()
 

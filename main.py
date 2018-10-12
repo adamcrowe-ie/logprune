@@ -18,14 +18,14 @@ from TestSuiteConfig import *
 
 def main():
     if "--test" in sys.argv:
-        TestUnit = TestSuite.TestUnit("main")
-        for directory in TestUnit.directoriesToTest:
+        testUnit = TestSuite.TestUnit("main")
+        for directory in testUnit.directoriesToTest:
             try:
                 print "Testing Directory " + directory
                 processLogs(directory, TESTING_UNZIPPED_SIZE_LIMIT, TESTING_ZIPPED_SIZE_LIMIT)
             except:
-                TestUnit.testFailure(directory)
-        TestUnit.checkOutcomes()
+                testUnit.testFailure(directory)
+        testUnit.checkOutcomes()
     elif "--convert" in sys.argv:
         convert.run()
     else:
