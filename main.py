@@ -17,8 +17,6 @@ from TestSuiteConfig import *
 
 
 def main():
-    if "--convert" in sys.argv:
-        convert.run()
     if "--test" in sys.argv:
         testUnit = TestSuite.TestUnit("main")
         for directory in testUnit.directoriesToTest:
@@ -28,6 +26,8 @@ def main():
             except:
                 testUnit.testFailure(directory)
         testUnit.checkOutcomes()
+    elif "--convert" in sys.argv:
+        convert.run()
     else:
         while True:
             processLogs()

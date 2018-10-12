@@ -16,7 +16,7 @@ class TestUnit:
         shutil.rmtree(self.testOutputFilesDirectory)
         copy_tree(self.originalFilesDirectory, self.testOutputFilesDirectory)
         
-        self.directoriesToTest = [os.path.join(self.testOutputFilesDirectory, directory) for directory
+        self.directoriesToTest = [os.path.join(self.testOutputFilesDirectory, directory) for directory 
                                   in os.listdir(self.testOutputFilesDirectory)]
 
         print "\nRunning Tests on Module " + unitToTest
@@ -27,14 +27,14 @@ class TestUnit:
 
 
     def checkOutcomes(self):
-        for directory in os.listdir(self.testOutputFilesDirectory):
-
+        for directory in self.directoriesToTest:
+            
             testOutput = os.path.join(self.testOutputFilesDirectory, directory)
             expectedOutcome = os.path.join(self.outcomeFilesDirectory, directory)
             
             dircmp = filecmp.dircmp(testOutput, expectedOutcome)
 
-            if dircmp.left_list != dircmp.right_list and testOutput not in self.failedDirectories:
+            if dircmp.left_list != dircmp.right_list:
                 self.failedDirectories.append(testOutput)
 
         if len(self.failedDirectories) > 0:
