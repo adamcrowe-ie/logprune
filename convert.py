@@ -1,6 +1,8 @@
 # This program will convert logrotate style logs into compressed logs
 
-from main import *
+import sys, main, os, gzip, TestSuite
+
+from config import *
 
 
 def run():
@@ -12,7 +14,7 @@ def run():
                 convert(directory)
             except:
                 testUnit.testFailure(directory)
-
+        testUnit.checkOutcomes()
     else:
         convert()
 
@@ -21,24 +23,26 @@ def run():
 def convert(directory = PATH):
     for logLevel in LOGLEVELS:
 
-        indexes = listLogIndexes(logLevel, directory)
-        lowestIndex, highestIndex = indexes[0], indexes[-1]
+        indexes = main.listLogIndexes(logLevel, directory)
+        if len(indexes) > 0:
+            lowestIndex, highestIndex = indexes[0], indexes[-1]
 
-        for fileName, filePath in listLogArchives(logLevel, directory):
+        for fileName, filePath in main.listLogArchives(logLevel, directory):
             if ".gz" not in fileName:
+
                 # open the original file
                 with open(filePath, "rb+") as unzippedFile:
 
-                    newIndex = highestIndex + lowestIndex - index(filePath)
-
-                    zippedFilePath = os.path.join(PATH, "{0}.log.{1}.gz").format(logLevel, newIndex)
+                    newIndex = highestIndex + lowestIndex - main.index(filePath)
+                    zippedFileName = "{0}.log.{1}.gz".format(logLevel, newIndex)
+                    zippedFilePath = os.path.join(directory, zippedFileName)
 
                     with gzip.open(zippedFilePath, "wb") as zippedFile:
                         unzippedRaw = unzippedFile.read()
                         zippedFile.write(unzippedRaw)
 
-                    # delete the original file
-                    os.remove(filePath)
+                # delete the original file
+                os.remove(filePath)
 
 
 if __name__ == "__main__":
